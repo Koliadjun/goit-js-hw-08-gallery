@@ -34,7 +34,7 @@ function modalOpenClose(action) {
     }
     if (action === ACTION.close) {
         refs.lightboxEl.classList.remove('is-open');
-        currentImgSourceUrl = ''
+        currentImgSourceUrl = '';
         setLightBoxImageSrcAttribute(currentImgSourceUrl);
     }
 }
@@ -43,7 +43,7 @@ function nextImgUrl(url) {
     let nextIndex;
     if (currentIndex === source.default.length - 1) {
         nextIndex = 0;
-    } else { nextIndex = currentIndex + 1 }
+    } else { nextIndex = currentIndex + 1; }
 
     currentImgSourceUrl = source.default[nextIndex].original;
     return currentImgSourceUrl;
@@ -52,7 +52,7 @@ function prevImgUrl(url) {
     const currentIndex = source.default.map((e) => e.original).indexOf(url);
     let prevIndex;
     if (currentIndex === 0) {
-        prevIndex = source.default.length - 1
+        prevIndex = source.default.length - 1;
     } else { prevIndex = currentIndex - 1; }
 
     currentImgSourceUrl = source.default[prevIndex].original;
@@ -68,7 +68,7 @@ refs.galleryEl.addEventListener('click', (e) => {
 refs.lightboxEl.addEventListener('click', (e) => {
     if (!(e.target.dataset.action === 'close-lightbox')
         && !e.target.classList.contains('lightbox__overlay')) return;
-    modalOpenClose(ACTION.close)
+    modalOpenClose(ACTION.close);
 })
 document.addEventListener('keyup', (e) => {
     if (refs.lightboxEl.classList.contains('is-open')) {
