@@ -1,11 +1,21 @@
 import * as source from './gallery-items.js';
+
+const urlImg = 'https://pixabay.com/api/?key=21859893-eed1f1d786560e2667ad1f26b&&image_type=photo&pretty=true&per_page=200'
+let response = await fetch(urlImg);
+
+let data = await response.json();
+
 let currentImgSourceUrl = '';
+let inputData = [];
 const refs = {
     galleryEl: document.querySelector('.js-gallery'),
     lightboxEl: document.querySelector('.js-lightbox'),
     lightboxButtonEl: document.querySelector('button[data-action="close-lightbox"]'),
     lightboxImageEl: document.querySelector('.lightbox__image'),
+    input: document.querySelector('.more-image'),
+    divFixed: document.querySelector('.fixed'),
 };
+
 const ACTION = {
     close: 'close',
     open: 'open',
@@ -15,14 +25,16 @@ function createGalleryItemsMarkup(array) {
         `<li class="gallery__item">
         <a class="gallery__link" href="${el.original}">
                 <img
-                class="gallery__image"
-                src="${el.preview}"
+                loading="lazy"
+                class="gallery__image lazyload"
+                data-src="${el.preview}"
                 data-source="${el.original}"
                 alt="${el.description}"
                 />
             </a>
             </li>`).join('');
 };
+
 function setLightBoxImageSrcAttribute(url) {
     refs.lightboxImageEl.setAttribute('src', url);
 
@@ -30,36 +42,76 @@ function setLightBoxImageSrcAttribute(url) {
 function modalOpenClose(action) {
     if (action === ACTION.open) {
         refs.lightboxEl.classList.add('is-open');
+        refs.divFixed.classList.add('is-close')
         setLightBoxImageSrcAttribute(currentImgSourceUrl);
     }
     if (action === ACTION.close) {
         refs.lightboxEl.classList.remove('is-open');
+        refs.divFixed.classList.remove('is-close')
         currentImgSourceUrl = '';
         setLightBoxImageSrcAttribute(currentImgSourceUrl);
     }
 }
 function nextImgUrl(url) {
-    const currentIndex = source.default.map((e) => e.original).indexOf(url);
+    const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let nextIndex;
-    if (currentIndex === source.default.length - 1) {
+    if (currentIndex === inputData.length - 1) {
         nextIndex = 0;
     } else { nextIndex = currentIndex + 1; }
 
-    currentImgSourceUrl = source.default[nextIndex].original;
+    currentImgSourceUrl = inputData[nextIndex].original;
     return currentImgSourceUrl;
 }
 function prevImgUrl(url) {
-    const currentIndex = source.default.map((e) => e.original).indexOf(url);
+    const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let prevIndex;
     if (currentIndex === 0) {
-        prevIndex = source.default.length - 1;
+        prevIndex = inputData.length - 1;
     } else { prevIndex = currentIndex - 1; }
 
-    currentImgSourceUrl = source.default[prevIndex].original;
+    currentImgSourceUrl = inputData[prevIndex].original;
     return currentImgSourceUrl;
 }
+function pixabayCovertData(data) {
+    const outputData = data.hits.map((el) => {
+        return {
+            preview: el.webformatURL,
+            original: el.largeImageURL,
+            description: el.user
+        };
+    });
+    return outputData;
+}
+function lazyLoadSupport() {
+    if ('loading' in HTMLImageElement.prototype) {
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        images.forEach(img => {
+            img.src = img.dataset.src;
+        });
+    } else {
+        // Dynamically import the LazySizes library
+        const script = document.createElement('script');
+        script.src =
+            'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
+        document.body.appendChild(script);
+    }
+}
 
-refs.galleryEl.innerHTML = createGalleryItemsMarkup(source.default);
+if (refs.input.checked) {
+    inputData = pixabayCovertData(data);
+} else { inputData = source.default; }
+refs.galleryEl.innerHTML = createGalleryItemsMarkup(inputData);
+lazyLoadSupport();
+refs.input.addEventListener('input', (e) => {
+    if (refs.input.checked) {
+        inputData = pixabayCovertData(data);
+    } else {
+        inputData = source.default;
+    }
+    refs.galleryEl.innerHTML = createGalleryItemsMarkup(inputData);
+    lazyLoadSupport();
+})
+
 refs.galleryEl.addEventListener('click', (e) => {
     e.preventDefault();
     currentImgSourceUrl = e.target.dataset.source;
