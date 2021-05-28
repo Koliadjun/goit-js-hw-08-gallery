@@ -1,7 +1,7 @@
 import * as source from './gallery-items.js';
 
 
-let currentImgSource = '';
+let currentImgSourceUrl = '';
 const refs = {
     galleryEl: document.querySelector('.js-gallery'),
     lightboxEl: document.querySelector('.js-lightbox'),
@@ -24,6 +24,7 @@ function createGalleryItemMarkup(array) {
 refs.galleryEl.innerHTML = createGalleryItemMarkup(source.default);
 refs.galleryEl.addEventListener('click', (e) => {
     e.preventDefault();
-    currentImgSource = e.target.dataset.source;
-    console.log(currentImgSource)
+    currentImgSourceUrl = e.target.dataset.source;
+    console.log(currentImgSourceUrl);
+    refs.lightboxEl.classList.add('is-open')
 })
