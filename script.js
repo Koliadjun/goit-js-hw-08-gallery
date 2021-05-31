@@ -1,10 +1,9 @@
 import * as source from './gallery-items.js';
 let data;
-const urlImg = 'https://pixabay.com/api/?key=21859893-eed1f1d786560e2667ad1f26b&&image_type=photo&pretty=true&per_page=200'
+const urlImg = 'https://pixabay.com/api/?key=21859893-eed1f1d786560e2667ad1f26b&&image_type=photo&pretty=true&per_page=200';
 
 if (self.fetch) {
-    let response = await fetch(urlImg, {
-    });
+    let response = await fetch(urlImg);
     if (response.ok) {
         data = await response.json();
     } else {
@@ -33,7 +32,7 @@ const refs = {
 const ACTION = {
     close: 'close',
     open: 'open',
-}
+};
 function createGalleryItemsMarkup(array) {
     return array.map(el =>
         `<li class="gallery__item">
@@ -52,7 +51,7 @@ function createGalleryItemsMarkup(array) {
 function setLightBoxImageSrcAttribute(url) {
     refs.lightboxImageEl.setAttribute('src', url);
 
-}
+};
 function modalOpenClose(action) {
     if (action === ACTION.open) {
         refs.lightboxEl.classList.add('is-open');
@@ -65,7 +64,7 @@ function modalOpenClose(action) {
         currentImgSourceUrl = '';
         setLightBoxImageSrcAttribute(currentImgSourceUrl);
     }
-}
+};
 function nextImgUrl(url) {
     const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let nextIndex;
@@ -75,7 +74,7 @@ function nextImgUrl(url) {
 
     currentImgSourceUrl = inputData[nextIndex].original;
     return currentImgSourceUrl;
-}
+};
 function prevImgUrl(url) {
     const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let prevIndex;
@@ -85,7 +84,7 @@ function prevImgUrl(url) {
 
     currentImgSourceUrl = inputData[prevIndex].original;
     return currentImgSourceUrl;
-}
+};
 function pixabayCovertData(data) {
     const outputData = data.hits.map((el) => {
         return {
@@ -95,7 +94,7 @@ function pixabayCovertData(data) {
         };
     });
     return outputData;
-}
+};
 function lazyLoadSupport() {
     if ('loading' in HTMLImageElement.prototype) {
         const images = document.querySelectorAll('img[loading="lazy"]');
@@ -109,7 +108,7 @@ function lazyLoadSupport() {
             'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
         document.body.appendChild(script);
     }
-}
+};
 
 refs.lightboxImageEl.addEventListener('touchstart', handleTouchStart, false);
 refs.lightboxImageEl.addEventListener('touchmove', handleTouchMove, false);
@@ -120,7 +119,7 @@ var yDown = null;
 function getTouches(evt) {
     return evt.touches ||             // browser API
         evt.originalEvent.touches; // jQuery
-}
+};
 
 function handleTouchStart(evt) {
     const firstTouch = getTouches(evt)[0];
@@ -163,7 +162,7 @@ if (refs.input.checked) {
 } else { inputData = source.default; }
 refs.galleryEl.innerHTML = createGalleryItemsMarkup(inputData);
 lazyLoadSupport();
-refs.input.addEventListener('input', (e) => {
+refs.input.addEventListener('input', () => {
     if (refs.input.checked) {
         inputData = pixabayCovertData(data);
     } else {
