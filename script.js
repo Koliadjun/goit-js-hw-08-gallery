@@ -46,12 +46,12 @@ function createGalleryItemsMarkup(array) {
                 />
             </a>
             </li>`).join('');
-};
+}
 
 function setLightBoxImageSrcAttribute(url) {
     refs.lightboxImageEl.setAttribute('src', url);
 
-};
+}
 function modalOpenClose(action) {
     if (action === ACTION.open) {
         refs.lightboxEl.classList.add('is-open');
@@ -64,7 +64,7 @@ function modalOpenClose(action) {
         currentImgSourceUrl = '';
         setLightBoxImageSrcAttribute(currentImgSourceUrl);
     }
-};
+}
 function nextImgUrl(url) {
     const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let nextIndex;
@@ -74,7 +74,7 @@ function nextImgUrl(url) {
 
     currentImgSourceUrl = inputData[nextIndex].original;
     return currentImgSourceUrl;
-};
+}
 function prevImgUrl(url) {
     const currentIndex = inputData.map((e) => e.original).indexOf(url);
     let prevIndex;
@@ -84,7 +84,7 @@ function prevImgUrl(url) {
 
     currentImgSourceUrl = inputData[prevIndex].original;
     return currentImgSourceUrl;
-};
+}
 function pixabayCovertData(data) {
     const outputData = data.hits.map((el) => {
         return {
@@ -94,7 +94,7 @@ function pixabayCovertData(data) {
         };
     });
     return outputData;
-};
+}
 function lazyLoadSupport() {
     if ('loading' in HTMLImageElement.prototype) {
         const images = document.querySelectorAll('img[loading="lazy"]');
@@ -108,7 +108,7 @@ function lazyLoadSupport() {
             'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js';
         document.body.appendChild(script);
     }
-};
+}
 
 refs.lightboxImageEl.addEventListener('touchstart', handleTouchStart, false);
 refs.lightboxImageEl.addEventListener('touchmove', handleTouchMove, false);
@@ -119,13 +119,13 @@ var yDown = null;
 function getTouches(evt) {
     return evt.touches ||             // browser API
         evt.originalEvent.touches; // jQuery
-};
+}
 
 function handleTouchStart(evt) {
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;
-};
+}
 
 function handleTouchMove(evt) {
     if (!xDown || !yDown) {
@@ -154,8 +154,7 @@ function handleTouchMove(evt) {
     /* reset values */
     xDown = null;
     yDown = null;
-};
-
+}
 
 if (refs.input.checked) {
     inputData = pixabayCovertData(data);
