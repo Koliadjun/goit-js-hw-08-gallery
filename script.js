@@ -2,7 +2,7 @@ import * as source from './gallery-items.js';
 let data;
 const urlImg = 'https://pixabay.com/api/?key=21859893-eed1f1d786560e2667ad1f26b&&image_type=photo&pretty=true&per_page=200';
 
-if (self.fetch) {
+if (false) {
     let response = await fetch(urlImg);
     if (response.ok) {
         data = await response.json();
@@ -11,7 +11,7 @@ if (self.fetch) {
     }
 } else {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', urlImg,);
+    xhr.open('GET', urlImg);
     xhr.responseType = 'json';
     xhr.send();
     xhr.onload = function () {
